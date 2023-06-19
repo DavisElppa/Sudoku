@@ -8,9 +8,9 @@
 
 `test.cpp`: 测试程序
 
-`sudoku.txt`: 数独终局文件
+`game.txt`: 数独终局文件
 
-`result.txt`: 求解结果文件
+`sudoku.txt`: 求解结果文件
 
 `sudoku.exe`: 可执行程序
 
