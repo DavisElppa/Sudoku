@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include <cstring>
 #include <ctime>
@@ -84,7 +84,7 @@ void Permutate_Permutation(int source[], int start, int end, int target[Maxn][Ma
     }
 }
 
-void Generate_EndGame(string path, int num) {
+void Generate_EndGame(const string& path, int num) {
     ofstream fout;
     fout.open(path);
 
@@ -143,7 +143,7 @@ void Generate_EndGame(string path, int num) {
     }
 }
 
-void Generate_NewGame(string input_path, string output_path, int num, bool set_difficulty, int difficulty = EASY,
+void Generate_NewGame(const string& input_path, const string& output_path, int num, bool set_difficulty, int difficulty = EASY,
                       int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
     char game[9][9] = {0};
     srand(time(nullptr));
@@ -158,10 +158,10 @@ void Generate_NewGame(string input_path, string output_path, int num, bool set_d
             fin.seekg(0, ios::beg);
         }
         bool err = false;
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                fin >> game[i][j];
-                if (game[i][j] == '.') {
+        for (auto & i : game) {
+            for (char & j : i) {
+                fin >> j;
+                if (j == '.') {
                     err = true;
                     break;
                 }
@@ -208,11 +208,11 @@ void Generate_NewGame(string input_path, string output_path, int num, bool set_d
                 } else {
                     if (!ret) {
                         ret = true;
-                        for (int m = 0; m < 9; m++) {
+                        for (auto & m : game) {
                             bool if_break = false;
-                            for (int n = 0; n < 9; n++) {
-                                if (game[m][n] != '.') {
-                                    game[m][n] = '.';
+                            for (char & n : m) {
+                                if (n != '.') {
+                                    n = '.';
                                     if_break = true;
                                     break;
                                 }
@@ -239,11 +239,11 @@ void Generate_NewGame(string input_path, string output_path, int num, bool set_d
             }
         }
         //写入游戏文件
-        for (int i = 0; i < 9; i++) {
+        for (auto & i : game) {
             for (int j = 0; j < 8; j++) {
-                fout << game[i][j] << " ";
+                fout << i[j] << " ";
             }
-            fout << game[i][8] << endl;
+            fout << i[8] << endl;
         }
         fout << endl;
     }
@@ -251,7 +251,7 @@ void Generate_NewGame(string input_path, string output_path, int num, bool set_d
     fout.close();
 }
 
-void Play_Game(string input_path, string output_path) {
+void Play_Game(const string& input_path, const string& output_path) {
     ifstream fin;
     fin.open(input_path);
     ofstream fout;
@@ -265,7 +265,7 @@ int main(int n_argc, char *argv[]) {
     //解析参数
     vector<string> argvList;
     for (int i = 0; i < n_argc; i++)
-        argvList.push_back(argv[i]);
+        argvList.emplace_back(argv[i]);
     if (argvList[1] == "-c") {
         //生成终局文件
         int num = atoi(argvList[2].c_str());
