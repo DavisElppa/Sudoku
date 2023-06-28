@@ -1,0 +1,4 @@
+﻿  sudoku.cpp
+D:\VS项目\sudoku求解\sudoku求解\sudoku.cpp(101,11): warning C4101: “yy”: 未引用的局部变量
+D:\VS项目\sudoku求解\sudoku求解\sudoku.cpp(101,7): warning C4101: “xx”: 未引用的局部变量
+  sudoku求解.vcxproj -> D:\VS项目\sudoku求解\Debug\sudoku求解.exe
