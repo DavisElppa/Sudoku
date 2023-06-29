@@ -1,3 +1,4 @@
+#include "./SudokuUnitTest/pch.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,23 +7,11 @@
 #include <cstring>
 #include <ctime>
 #include <random>
-
-#define MAX_SPACE 64
-#define MIN_SPACE 20
-
-#define EASY 1
-#define NORMAL 2
-#define HARD 3
-
-const int Maxn = 1e6 + 10;
-const int Maxm = 10;
-
-int Step[80][Maxm];
-int Permutation[Maxn][Maxm];
+#include "sudoku.h"
 
 using namespace std;
 
-void Permutate_Temp(int source[], int start, int end, int target[6][3], int &line) {
+bool Permutate_Temp(int source[], int start, int end, int target[6][3], int &line) {
     if (start > end)
         start = end;
     if (start == end) {
@@ -38,7 +27,7 @@ void Permutate_Temp(int source[], int start, int end, int target[6][3], int &lin
     }
 }
 
-void Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_num, int move_step[80][Maxm]) {
+bool Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_num, int move_step[80][Maxm]) {
     int cnt = 0;
     for (int i = 0; i < 2; i++) {
         //  二三行有两个排列，二选一
@@ -63,7 +52,7 @@ void Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_n
     }
 }
 
-void Permutate_Permutation(int source[], int start, int end, int target[Maxn][Maxm], int &line, int max_num)  //全排序
+bool Permutate_Permutation(int source[], int start, int end, int target[Maxn][Maxm], int &line, int max_num)  //全排序
 {
     if (start > end)  // 防止输入错误，导致越界
         start = end;
@@ -85,7 +74,7 @@ void Permutate_Permutation(int source[], int start, int end, int target[Maxn][Ma
 }
 
 //生成数独终局
-void Generate_EndGame(const string &path, int num) {
+bool Generate_EndGame(const string &path, int num) {
     ofstream fout;
     fout.open(path);
 
@@ -218,7 +207,7 @@ bool jggfz(int djgg) {
     return true;
 }
 
-void dfs(int na, int nb, const string &output_path) { //第几行第几个
+bool dfs(int na, int nb, const string &output_path) { //第几行第几个
     if (alltheanswer >= 10000) //数量太过庞大，求解的速度就会变得很慢
         return;
     if (bbid == 10) {
@@ -267,7 +256,7 @@ void dfs(int na, int nb, const string &output_path) { //第几行第几个
     }
 }
 
-void solve_single_sudoku(const string &output_path, bool need_output) {
+bool solve_single_sudoku(const string &output_path, bool need_output) {
     for (int i = 1; i < 10; i++) {
         for (int j = 1; j < 10; j++) {
             if (a[i][j] != 0)
@@ -300,7 +289,7 @@ void solve_single_sudoku(const string &output_path, bool need_output) {
     }
 }
 
-void Play_Game(const string &input_path, const string &output_path) {
+bool Play_Game(const string &input_path, const string &output_path) {
     ofstream answer(output_path, ios::trunc); //清空输出文件
     answer.close();
     ifstream game(input_path);  // 替换为您的文件名
@@ -346,11 +335,9 @@ void Play_Game(const string &input_path, const string &output_path) {
     }
 }
 
-void Generate_NewGame(const string &input_path, const string &output_path, int num, bool set_difficulty,
-                      int difficulty = EASY,
-                      int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
-    char game[9][9] = {0};
-    char temp[9][9] = {0};
+bool Generate_NewGame(const string& input_path, const string& output_path, int num, bool set_difficulty, int difficulty = EASY, int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
+    char game[9][9] = { 0 };
+    char temp[9][9] = { 0 };
     srand(time(nullptr));
     ifstream fin;
     fin.open(input_path);
@@ -363,8 +350,8 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
             fin.seekg(0, ios::beg);
         }
         bool err = false;
-        for (auto &i: game) {
-            for (char &j: i) {
+        for (auto& i : game) {
+            for (char& j : i) {
                 fin >> j;
                 if (j == '$') {
                     err = true;
@@ -385,22 +372,23 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
             int num_space = 0;
             if (set_difficulty) {
                 switch (difficulty) {
-                    case EASY:
-                        //20~31空
-                        num_space = rand() % 12 + 20;
-                        break;
-                    case NORMAL:
-                        //32~47空
-                        num_space = rand() % 16 + 32;
-                        break;
-                    case HARD:
-                        //48~64空
-                        num_space = rand() % 17 + 48;
-                        break;
-                    default:
-                        break;
+                case EASY:
+                    //20~31空
+                    num_space = rand() % 12 + 20;
+                    break;
+                case NORMAL:
+                    //32~47空
+                    num_space = rand() % 16 + 32;
+                    break;
+                case HARD:
+                    //48~64空
+                    num_space = rand() % 17 + 48;
+                    break;
+                default:
+                    break;
                 }
-            } else {
+            }
+            else {
                 num_space = rand() % (max_space - min_space + 1) + min_space;
             }
             random_device rd;
@@ -411,12 +399,13 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
                 int col = r_eng() % 9;
                 if (temp[row][col] != '$') {
                     temp[row][col] = '$';
-                } else {
+                }
+                else {
                     if (!ret) {
                         ret = true;
-                        for (auto &m: temp) {
+                        for (auto& m : temp) {
                             bool if_break = false;
-                            for (char &n: m) {
+                            for (char& n : m) {
                                 if (n != '$') {
                                     n = '$';
                                     if_break = true;
@@ -426,7 +415,8 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
                             if (if_break)
                                 break;
                         }
-                    } else {
+                    }
+                    else {
                         ret = false;
                         for (int m = 8; m >= 0; m--) {
                             bool if_break = false;
@@ -467,7 +457,7 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
             }
         }
         //写入游戏文件
-        for (auto &i: temp) {
+        for (auto& i : temp) {
             for (int j = 0; j < 8; j++) {
                 fout << i[j] << " ";
             }
@@ -477,6 +467,7 @@ void Generate_NewGame(const string &input_path, const string &output_path, int n
     }
     fin.close();
     fout.close();
+    return true;
 }
 
 int main(int n_argc, char *argv[]) {
