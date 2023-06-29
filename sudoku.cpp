@@ -84,7 +84,7 @@ void Permutate_Permutation(int source[], int start, int end, int target[Maxn][Ma
     }
 }
 
-void Generate_EndGame(const string& path, int num) {
+void Generate_EndGame(const string &path, int num) {
     ofstream fout;
     fout.open(path);
 
@@ -143,7 +143,8 @@ void Generate_EndGame(const string& path, int num) {
     }
 }
 
-void Generate_NewGame(const string& input_path, const string& output_path, int num, bool set_difficulty, int difficulty = EASY,
+void Generate_NewGame(const string &input_path, const string &output_path, int num, bool set_difficulty,
+                      int difficulty = EASY,
                       int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
     char game[9][9] = {0};
     srand(time(nullptr));
@@ -158,8 +159,8 @@ void Generate_NewGame(const string& input_path, const string& output_path, int n
             fin.seekg(0, ios::beg);
         }
         bool err = false;
-        for (auto & i : game) {
-            for (char & j : i) {
+        for (auto &i: game) {
+            for (char &j: i) {
                 fin >> j;
                 if (j == '.') {
                     err = true;
@@ -199,7 +200,6 @@ void Generate_NewGame(const string& input_path, const string& output_path, int n
             random_device rd;
             mt19937 r_eng(rd());
             bool ret = false;
-            cout << cnt << " " << num_space << endl;
             for (int i = 0; i < num_space; i++) {
                 int row = r_eng() % 9;
                 int col = r_eng() % 9;
@@ -208,9 +208,9 @@ void Generate_NewGame(const string& input_path, const string& output_path, int n
                 } else {
                     if (!ret) {
                         ret = true;
-                        for (auto & m : game) {
+                        for (auto &m: game) {
                             bool if_break = false;
-                            for (char & n : m) {
+                            for (char &n: m) {
                                 if (n != '.') {
                                     n = '.';
                                     if_break = true;
@@ -239,7 +239,7 @@ void Generate_NewGame(const string& input_path, const string& output_path, int n
             }
         }
         //写入游戏文件
-        for (auto & i : game) {
+        for (auto &i: game) {
             for (int j = 0; j < 8; j++) {
                 fout << i[j] << " ";
             }
@@ -251,12 +251,12 @@ void Generate_NewGame(const string& input_path, const string& output_path, int n
     fout.close();
 }
 
-void Play_Game(const string& input_path, const string& output_path) {
+void Play_Game(const string &input_path, const string &output_path) {
     ifstream fin;
     fin.open(input_path);
     ofstream fout;
     fout.open(output_path);
-    
+
     fin.close();
     fout.close();
 }
@@ -299,8 +299,12 @@ int main(int n_argc, char *argv[]) {
             } else if (argvList[3] == "-u") {
                 //生成唯一解的游戏
                 Generate_NewGame(input_path, generate_path, num, false, EASY, MIN_SPACE, MAX_SPACE, true);
+            } else {
+                cout << "参数非法！" << endl;
             }
         }
+    } else {
+        cout << "参数非法！" << endl;
     }
     return 0;
 }
