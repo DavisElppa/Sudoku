@@ -3,16 +3,17 @@
 #include<string>
 using namespace std;
 
-int a[11][11];//´æ´¢Êý¶ÀÓÎÏ·
-int b[11];//Ã¿ÐÐÒÑÖªÊý×î¶à
-int bid[11];//bµÄid
-int bbid;//bidµÚ¼¸¸ö
-int c[11];//Ã¿ÁÐÒÑÖªÊý×î¶à
-int cid[11];//cµÄid
-int ccid;//cidµÚ¼¸¸ö
-int alltheanswer;//ËùÓÐ½â
+int a[11][11];//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·
+int b[11];//Ã¿ï¿½ï¿½ï¿½ï¿½Öªï¿½ï¿½ï¿½ï¿½ï¿½
+int bid[11];//bï¿½ï¿½id
+int bbid;//bidï¿½Ú¼ï¿½ï¿½ï¿½
+int c[11];//Ã¿ï¿½ï¿½ï¿½ï¿½Öªï¿½ï¿½ï¿½ï¿½ï¿½
+int cid[11];//cï¿½ï¿½id
+int ccid;//cidï¿½Ú¼ï¿½ï¿½ï¿½
+int alltheanswer;//ï¿½ï¿½ï¿½Ð½ï¿½
 int wanttheanswer=1;
-bool checkx(int x) {//xÎªµÚ¼¸ÐÐ
+bool checkx(int x) {//xÎªï¿½Ú¼ï¿½ï¿½ï¿½
+
 	for (int i = 1; i <= 9; i++) {
 		if (a[x][i] == 0)
 			continue;
@@ -22,7 +23,7 @@ bool checkx(int x) {//xÎªµÚ¼¸ÐÐ
 	}
 	return true;
 }
-bool checky(int y) { //yÎªµÚ¼¸ÁÐ
+bool checky(int y) { //yÎªï¿½Ú¼ï¿½ï¿½ï¿½
 	for (int i = 1; i <= 9; i++) {
 		if (a[i][y] == 0)
 			continue;
@@ -67,7 +68,7 @@ bool jggfz(int djgg) {
 	}
 	return true;
 }
-void dfs(int na, int nb) { //µÚ¼¸ÐÐµÚ¼¸¸ö
+void dfs(int na, int nb) { //ï¿½Ú¼ï¿½ï¿½ÐµÚ¼ï¿½ï¿½ï¿½
 	if (bbid == 10) {
 		alltheanswer++;
 		if (wanttheanswer >= alltheanswer) {
@@ -75,8 +76,8 @@ void dfs(int na, int nb) { //µÚ¼¸ÐÐµÚ¼¸¸ö
 			if (answer.is_open()) {
 				for (int i = 1; i <= 9; i++) {
 					for (int j = 1; j <= 8; j++) {
-						//Ö±½Ó°ÑµÚÒ»¸ö½âÐ´ÈëÎÄ¼þanswer.txt
-						//Ã¿´ÎÒÔ×·¼ÓµÄ·½Ê½Ð´Èë
+						//Ö±ï¿½Ó°Ñµï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ä¼ï¿½answer.txt
+						//Ã¿ï¿½ï¿½ï¿½ï¿½×·ï¿½ÓµÄ·ï¿½Ê½Ð´ï¿½ï¿½
 						answer << a[i][j] << " ";
 					}
 					answer << a[i][9] << endl;
@@ -99,7 +100,7 @@ void dfs(int na, int nb) { //µÚ¼¸ÐÐµÚ¼¸¸ö
 	for (int i = 1; i <= 9; i++) {
 		a[na][nb] = i;
 		int xx, yy;
-		int djgg = (na - 1) / 3 * 3 + (nb - 1) / 3 + 1;//µÚ¼¸¸ö¾Å¹¬¸ñ
+		int djgg = (na - 1) / 3 * 3 + (nb - 1) / 3 + 1;//ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½Å¹ï¿½ï¿½ï¿½
 		if (checkx(na) == false || checky(nb) == false || jggfz(djgg) == false) {
 			a[na][nb] = 0;
 			continue;
@@ -141,7 +142,7 @@ void solve_single_sudoku()
 		}
 	}
 
-	dfs(bid[++bbid], cid[++ccid]); //Ö±½ÓÇó½âËùÓÐ´ð°¸,²¢Ð´Ò»¸ö´ð°¸µ½txtÖÐ
+	dfs(bid[++bbid], cid[++ccid]); //Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½,ï¿½ï¿½Ð´Ò»ï¿½ï¿½ï¿½ð°¸µï¿½txtï¿½ï¿½
 	ofstream answer("answer.txt", ios::app);
 	if (answer.is_open()){
 		answer << "number of answers : " << alltheanswer << endl << endl;
@@ -150,23 +151,23 @@ void solve_single_sudoku()
 }
 
 
-//ÎÒ¸Ð¾õÃ¿´ÎÇó½â£¬¿ÉÒÔÖØÖÃÒ»Ð©ÔªËØ
+//ï¿½Ò¸Ð¾ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ð©Ôªï¿½ï¿½
 void solve()
 {
 	ofstream answer("answer.txt", ios::trunc);
 	answer.close();
-	ifstream game("game.txt");  // Ìæ»»ÎªÄúµÄÎÄ¼þÃû
+	ifstream game("game.txt");  // ï¿½æ»»Îªï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 
-	//¶ÁÈ¡ËùÓÐÊý¶Àµ½Ò»¸ö¶þÎ¬Êý×éÄÚ
+	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	int row = 1;
 	int col = 1;
 	if (game.is_open()){
 		string line;
 		while (getline(game, line)){
 			if (row != 0 && row % 10 == 0){
-				//ËµÃ÷¶ÁÈ¡ÍêÒ»¸öÊý¶À
-				//ÐèÒª½øÐÐÇó½â
-				//Çó½âÍêºó£¬¸÷Êý×éÉèÖÃÎª³õÖµ
+				//Ëµï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Öµ
 				solve_single_sudoku();
 
 				memset(a, 0, sizeof(a));
@@ -197,10 +198,10 @@ void solve()
 	}
 }
 
-//ÏÈ²âÊÔ¶ÁÈëÊý¾Ý
+//ï¿½È²ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 int main()
 {
-	//ifstream game("game.txt");  // Ìæ»»ÎªÄúµÄÎÄ¼þÃû
+	//ifstream game("game.txt");  // ï¿½æ»»Îªï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 
 	//int row = 1;
 	//int col = 1;
@@ -255,10 +256,10 @@ int main()
 	//	}
 	//}
 
-	//printf("ÇëÊäÈëÄãÆÚÍûµÃµ½µÄ½âÊý£º\n");
+	//printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½\n");
 	//cin >> wanttheanswer;
 	//dfs(bid[++bbid], cid[++ccid]);
-	//printf("´ËÌâËùÓÐ½âÎª£º%d\n\n", alltheanswer);
+	//printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½Îªï¿½ï¿½%d\n\n", alltheanswer);
 
 	solve();
 
