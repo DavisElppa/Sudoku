@@ -29,9 +29,6 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SudokuUnitTest.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\sudoku.h">
       <Filter>头文件</Filter>
     </ClInclude>

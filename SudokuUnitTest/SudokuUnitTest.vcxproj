@@ -168,7 +168,6 @@
   <ItemGroup>
     <ClInclude Include="..\sudoku.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="SudokuUnitTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,3 +1,4 @@
-#pragma once
+#ifndef SUDOKU_SUDOKU_H
+#define SUDOKU_SUDOKU_H
 
-void Permutate_Temp();
+#endif //SUDOKU_SUDOKU_H
