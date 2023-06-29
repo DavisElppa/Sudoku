@@ -84,6 +84,7 @@ void Permutate_Permutation(int source[], int start, int end, int target[Maxn][Ma
     }
 }
 
+//生成数独终局
 void Generate_EndGame(const string &path, int num) {
     ofstream fout;
     fout.open(path);
@@ -141,114 +142,6 @@ void Generate_EndGame(const string &path, int num) {
             fout << "\n";
         }
     }
-}
-
-void Generate_NewGame(const string &input_path, const string &output_path, int num, bool set_difficulty,
-                      int difficulty = EASY,
-                      int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
-    char game[9][9] = {0};
-    srand(time(nullptr));
-    ifstream fin;
-    fin.open(input_path);
-    ofstream fout;
-    fout.open(output_path);
-    for (int cnt = 0; cnt < num; cnt++) {
-        //读取终局
-        if (fin.eof()) {
-            fin.clear();
-            fin.seekg(0, ios::beg);
-        }
-        bool err = false;
-        for (auto &i: game) {
-            for (char &j: i) {
-                fin >> j;
-                if (j == '.') {
-                    err = true;
-                    break;
-                }
-            }
-        }
-        if (err) {
-            cnt--;
-            continue;
-        }
-        //生成游戏
-        if (only_solution) {
-
-        } else {
-            int num_space = 0;
-            if (set_difficulty) {
-                switch (difficulty) {
-                    case EASY:
-                        //20~31空
-                        num_space = rand() % 12 + 20;
-                        break;
-                    case NORMAL:
-                        //32~47空
-                        num_space = rand() % 16 + 32;
-                        break;
-                    case HARD:
-                        //48~64空
-                        num_space = rand() % 17 + 48;
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                num_space = rand() % (max_space - min_space + 1) + min_space;
-            }
-            random_device rd;
-            mt19937 r_eng(rd());
-            bool ret = false;
-            for (int i = 0; i < num_space; i++) {
-                int row = r_eng() % 9;
-                int col = r_eng() % 9;
-                if (game[row][col] != '.') {
-                    game[row][col] = '.';
-                } else {
-                    if (!ret) {
-                        ret = true;
-                        for (auto &m: game) {
-                            bool if_break = false;
-                            for (char &n: m) {
-                                if (n != '.') {
-                                    n = '.';
-                                    if_break = true;
-                                    break;
-                                }
-                            }
-                            if (if_break)
-                                break;
-                        }
-                    } else {
-                        ret = false;
-                        for (int m = 8; m >= 0; m--) {
-                            bool if_break = false;
-                            for (int n = 8; n >= 0; n--) {
-                                if (game[m][n] != '.') {
-                                    game[m][n] = '.';
-                                    if_break = true;
-                                    break;
-                                }
-                            }
-                            if (if_break)
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-        //写入游戏文件
-        for (auto &i: game) {
-            for (int j = 0; j < 8; j++) {
-                fout << i[j] << " ";
-            }
-            fout << i[8] << endl;
-        }
-        fout << endl;
-    }
-    fin.close();
-    fout.close();
 }
 
 //***************************************************************************
@@ -374,7 +267,7 @@ void dfs(int na, int nb, const string &output_path) { //第几行第几个
     }
 }
 
-void solve_single_sudoku(const string &output_path) {
+void solve_single_sudoku(const string &output_path, bool need_output) {
     for (int i = 1; i < 10; i++) {
         for (int j = 1; j < 10; j++) {
             if (a[i][j] != 0)
@@ -394,15 +287,16 @@ void solve_single_sudoku(const string &output_path) {
                 swap(c[j], c[j + 1]), swap(cid[j], cid[j + 1]);
         }
     }
-
     dfs(bid[++bbid], cid[++ccid], output_path); //直接求解所有答案,并写一个答案到txt中
-    ofstream answer(output_path, ios::app);
-    if (answer.is_open()) {
-        if (alltheanswer < 10000)
-            answer << "number of answers : " << alltheanswer << endl << endl;
-        else
-            answer << "number of answers exceed 10000" << endl << endl;
-        answer.close();
+    if (need_output) {
+        ofstream answer(output_path, ios::app);
+        if (answer.is_open()) {
+            if (alltheanswer < 10000)
+                answer << "number of answers : " << alltheanswer << endl << endl;
+            else
+                answer << "number of answers exceed 10000" << endl << endl;
+            answer.close();
+        }
     }
 }
 
@@ -422,7 +316,7 @@ void Play_Game(const string &input_path, const string &output_path) {
                 //说明读取完一个数独
                 //需要进行求解
                 //求解完后，各数组设置为初值
-                solve_single_sudoku(output_path);
+                solve_single_sudoku(output_path, true);
                 cout << "求解完第" << sudoku_num << "个数独" << endl;
                 memset(a, 0, sizeof(a));
                 memset(b, 0, sizeof(b));
@@ -438,7 +332,7 @@ void Play_Game(const string &input_path, const string &output_path) {
                 continue;
             }
             for (char ch: line) {
-                if (ch == '.') {
+                if (ch == '$') {
                     a[row][col] = 0;
                     col++;
                 } else if (ch >= '1' && ch <= '9') {
@@ -450,6 +344,139 @@ void Play_Game(const string &input_path, const string &output_path) {
             row++;
         }
     }
+}
+
+void Generate_NewGame(const string &input_path, const string &output_path, int num, bool set_difficulty,
+                      int difficulty = EASY,
+                      int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
+    char game[9][9] = {0};
+    char temp[9][9] = {0};
+    srand(time(nullptr));
+    ifstream fin;
+    fin.open(input_path);
+    ofstream fout;
+    fout.open(output_path);
+    for (int cnt = 0; cnt < num; cnt++) {
+        //读取终局
+        if (fin.eof()) {
+            fin.clear();
+            fin.seekg(0, ios::beg);
+        }
+        bool err = false;
+        for (auto &i: game) {
+            for (char &j: i) {
+                fin >> j;
+                if (j == '$') {
+                    err = true;
+                    break;
+                }
+            }
+        }
+        if (err) {
+            cnt--;
+            continue;
+        }
+        int num_solution = 1;
+        while (true) {
+            //生成游戏
+            for (int ii = 0; ii < 9; ii++)
+                for (int jj = 0; jj < 9; ++jj)
+                    temp[ii][jj] = game[ii][jj];
+            int num_space = 0;
+            if (set_difficulty) {
+                switch (difficulty) {
+                    case EASY:
+                        //20~31空
+                        num_space = rand() % 12 + 20;
+                        break;
+                    case NORMAL:
+                        //32~47空
+                        num_space = rand() % 16 + 32;
+                        break;
+                    case HARD:
+                        //48~64空
+                        num_space = rand() % 17 + 48;
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                num_space = rand() % (max_space - min_space + 1) + min_space;
+            }
+            random_device rd;
+            mt19937 r_eng(rd());
+            bool ret = false;
+            for (int i = 0; i < num_space; i++) {
+                int row = r_eng() % 9;
+                int col = r_eng() % 9;
+                if (temp[row][col] != '$') {
+                    temp[row][col] = '$';
+                } else {
+                    if (!ret) {
+                        ret = true;
+                        for (auto &m: temp) {
+                            bool if_break = false;
+                            for (char &n: m) {
+                                if (n != '$') {
+                                    n = '$';
+                                    if_break = true;
+                                    break;
+                                }
+                            }
+                            if (if_break)
+                                break;
+                        }
+                    } else {
+                        ret = false;
+                        for (int m = 8; m >= 0; m--) {
+                            bool if_break = false;
+                            for (int n = 8; n >= 0; n--) {
+                                if (temp[m][n] != '$') {
+                                    temp[m][n] = '$';
+                                    if_break = true;
+                                    break;
+                                }
+                            }
+                            if (if_break)
+                                break;
+                        }
+                    }
+                }
+            }
+            for (int ii = 1; ii < 10; ii++) {
+                for (int jj = 1; jj < 10; jj++) {
+                    if (temp[ii - 1][jj - 1] == '$')
+                        a[ii][jj] = 0;
+                    else if (temp[ii - 1][jj - 1] >= '1' && temp[ii - 1][jj - 1] <= '9')
+                        a[ii][jj] = temp[ii - 1][jj - 1] - '0';
+                }
+            }
+            solve_single_sudoku("sudoku.txt", false);
+            num_solution = alltheanswer;
+            memset(a, 0, sizeof(a));
+            memset(b, 0, sizeof(b));
+            memset(bid, 0, sizeof(bid));
+            bbid = 0;
+            memset(c, 0, sizeof(c));
+            memset(cid, 0, sizeof(cid));
+            ccid = 0;
+            alltheanswer = 0;
+            wanttheanswer = 1;
+            if (!only_solution || num_solution == 1) {
+                break;
+            }
+        }
+        //写入游戏文件
+        for (auto &i: temp) {
+            for (int j = 0; j < 8; j++) {
+                fout << i[j] << " ";
+            }
+            fout << i[8] << endl;
+        }
+        fout << endl;
+    }
+    fin.close();
+    fout.close();
 }
 
 int main(int n_argc, char *argv[]) {
