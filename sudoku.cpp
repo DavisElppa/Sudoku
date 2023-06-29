@@ -143,16 +143,6 @@ bool Generate_EndGame(const string &path, int num) {
 //***************************************************************************
 //***************************************************************************
 
-int a[11][11];//存储数独游戏
-int b[11];//每行已知数最多
-int bid[11];//b的id
-int bbid;//bid第几个
-int c[11];//每列已知数最多
-int cid[11];//c的id
-int ccid;//cid第几个
-int alltheanswer;//所有解
-int wanttheanswer = 1;
-
 bool checkx(int x) {//x为第几行
     for (int i = 1; i <= 9; i++) {
         if (a[x][i] == 0)

@@ -29,6 +29,17 @@ static string end_game_path = "./end_game.txt";
 static string new_game_path = "./game.txt";
 static string solution_path = "./sudoku.txt";
 
+
+static int a[11][11];//存储数独游戏
+static int b[11];//每行已知数最多
+static int bid[11];//b的id
+static int bbid;//bid第几个
+static int c[11];//每列已知数最多
+static int cid[11];//c的id
+static int ccid;//cid第几个
+static int alltheanswer;//所有解
+static int wanttheanswer = 1;
+
 bool Permutate_Temp(int source[], int start, int end, int target[6][3], int& line);
 bool Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_num, int move_step[80][Maxm]);
 bool Permutate_Permutation(int source[], int start, int end, int target[Maxn][Maxm], int& line, int max_num);

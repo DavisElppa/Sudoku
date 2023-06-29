@@ -92,5 +92,128 @@ namespace SudokuUnitTest
 		{
 			Assert::AreEqual(true, jggfz(9));
 		}
+		TEST_METHOD(TestDfs1)
+		{
+			// 先全部设置为0
+			memset(a, 0, sizeof(a));
+			memset(b, 0, sizeof(b));
+			memset(bid, 0, sizeof(bid));
+			bbid = 0;
+			memset(c, 0, sizeof(c));
+			memset(cid, 0, sizeof(cid));
+			ccid = 0;
+			alltheanswer = 0;
+			wanttheanswer = 1;
+
+			// 设置数独数组
+			int tmp[9][9] = {
+				{3, 1, 6, 2, 8, 5, 7, 9, 4},
+				{2, 8, 7, 0, 3, 9, 6, 1, 5},
+				{9, 5, 4, 1, 6, 7, 8, 0, 3},
+				{8, 4, 9, 6, 7, 0, 0, 0, 2},
+				{1, 6, 5, 0, 2, 3, 4, 7, 9},
+				{7, 3, 2, 5, 9, 4, 1, 0, 8},
+				{5, 2, 3, 7, 0, 8, 9, 4, 6},
+				{4, 9, 1, 3, 0, 6, 2, 8, 7},
+				{6, 7, 8, 9, 4, 2, 5, 3, 0}
+			};
+			for (int i = 1; i <= 9; i++) {
+				for (int j = 1; j <= 9; j++) {
+					a[i][j] = tmp[i - 1][j - 1];
+				}
+			}
+
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					if (a[i][j] != 0)
+						b[i]++;
+					if (a[j][i] != 0)
+						c[i]++;
+				}
+			}
+
+			for (int i = 1; i <= 9; i++)
+				bid[i] = i, cid[i] = i;
+			for (int i = 1; i <= 9; i++) {
+				for (int j = 1; j <= 9 - i; j++) {
+					if (b[j] < b[j + 1])
+						swap(b[j], b[j + 1]), swap(bid[j], bid[j + 1]);
+					if (c[j] < c[j + 1])
+						swap(c[j], c[j + 1]), swap(cid[j], cid[j + 1]);
+				}
+			}
+			;
+			Assert::AreEqual(true, dfs(bid[++bbid], cid[++ccid], solution_path));
+		}
+
+		TEST_METHOD(TestSolveSingleSudoku)
+		{
+			// 先全部设置为0
+			memset(a, 0, sizeof(a));
+			memset(b, 0, sizeof(b));
+			memset(bid, 0, sizeof(bid));
+			bbid = 0;
+			memset(c, 0, sizeof(c));
+			memset(cid, 0, sizeof(cid));
+			ccid = 0;
+			alltheanswer = 0;
+			wanttheanswer = 1;
+
+			// 设置数独数组
+			int tmp[9][9] = {
+				{3, 1, 6, 2, 8, 5, 7, 9, 4},
+				{2, 8, 7, 0, 3, 9, 6, 1, 5},
+				{9, 5, 4, 1, 6, 7, 8, 0, 3},
+				{8, 4, 9, 6, 7, 0, 0, 0, 2},
+				{1, 6, 5, 0, 2, 3, 4, 7, 9},
+				{7, 3, 2, 5, 9, 4, 1, 0, 8},
+				{5, 2, 3, 7, 0, 8, 9, 4, 6},
+				{4, 9, 1, 3, 0, 6, 2, 8, 7},
+				{6, 7, 8, 9, 4, 2, 5, 3, 0}
+			};
+
+			for (int i = 1; i <= 9; i++) {
+				for (int j = 1; j <= 9; j++) {
+					a[i][j] = tmp[i - 1][j - 1];
+				}
+			}
+
+			for (int i = 1; i < 10; i++) {
+				for (int j = 1; j < 10; j++) {
+					if (a[i][j] != 0)
+						b[i]++;
+					if (a[j][i] != 0)
+						c[i]++;
+				}
+			}
+
+			for (int i = 1; i <= 9; i++)
+				bid[i] = i, cid[i] = i;
+			for (int i = 1; i <= 9; i++) {
+				for (int j = 1; j <= 9 - i; j++) {
+					if (b[j] < b[j + 1])
+						swap(b[j], b[j + 1]), swap(bid[j], bid[j + 1]);
+					if (c[j] < c[j + 1])
+						swap(c[j], c[j + 1]), swap(cid[j], cid[j + 1]);
+				}
+			}
+			Assert::AreEqual(true, solve_single_sudoku(solution_path, false));
+		}
+
+		TEST_METHOD(TestPlayGame)
+		{
+			// 先全部设置为0
+			memset(a, 0, sizeof(a));
+			memset(b, 0, sizeof(b));
+			memset(bid, 0, sizeof(bid));
+			bbid = 0;
+			memset(c, 0, sizeof(c));
+			memset(cid, 0, sizeof(cid));
+			ccid = 0;
+			alltheanswer = 0;
+			wanttheanswer = 1;
+
+			Assert::AreEqual(true, Play_Game(new_game_path, solution_path));
+		}
 	};
 }
