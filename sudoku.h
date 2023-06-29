@@ -25,6 +25,10 @@ const int Maxm = 10;
 static int Step[80][Maxm];
 static int Permutation[Maxn][Maxm];
 
+static string end_game_path = "./end_game.txt";
+static string new_game_path = "./game.txt";
+static string solution_path = "./sudoku.txt";
+
 bool Permutate_Temp(int source[], int start, int end, int target[6][3], int& line);
 bool Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_num, int move_step[80][Maxm]);
 bool Permutate_Permutation(int source[], int start, int end, int target[Maxn][Maxm], int& line, int max_num);

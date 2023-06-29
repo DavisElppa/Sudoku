@@ -25,6 +25,7 @@ bool Permutate_Temp(int source[], int start, int end, int target[6][3], int &lin
             swap(source[i], source[start]);
         }
     }
+    return true;
 }
 
 bool Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_num, int move_step[80][Maxm]) {
@@ -46,10 +47,11 @@ bool Permutate_Step(int temp1[2][2], int temp2[6][3], int temp3[6][3], int max_n
                 }
                 cnt++;
                 if (cnt >= max_num)
-                    return;
+                    return true;
             }
         }
     }
+    return true;
 }
 
 bool Permutate_Permutation(int source[], int start, int end, int target[Maxn][Maxm], int &line, int max_num)  //全排序
@@ -65,12 +67,13 @@ bool Permutate_Permutation(int source[], int start, int end, int target[Maxn][Ma
     } else {
         for (int i = start; i <= end; i++) {
             if (line >= max_num)
-                return;
+                return true;
             swap(source[i], source[start]);
             Permutate_Permutation(source, start + 1, end, target, line, max_num);
             swap(source[i], source[start]);
         }
     }
+    return true;
 }
 
 //生成数独终局
@@ -131,6 +134,7 @@ bool Generate_EndGame(const string &path, int num) {
             fout << "\n";
         }
     }
+    return true;
 }
 
 //***************************************************************************
@@ -209,7 +213,7 @@ bool jggfz(int djgg) {
 
 bool dfs(int na, int nb, const string &output_path) { //第几行第几个
     if (alltheanswer >= 10000) //数量太过庞大，求解的速度就会变得很慢
-        return;
+        return false;
     if (bbid == 10) {
         alltheanswer++;
         if (wanttheanswer >= alltheanswer) {
@@ -226,7 +230,7 @@ bool dfs(int na, int nb, const string &output_path) { //第几行第几个
                 answer.close();
             }
         }
-        return;
+        return true;
     }
     if (a[na][nb] != 0) {
         int bbidd = bbid, ccidd = ccid;
@@ -236,7 +240,7 @@ bool dfs(int na, int nb, const string &output_path) { //第几行第几个
             ccid++;
         dfs(bid[bbid], cid[ccid], output_path);
         bbid = bbidd, ccid = ccidd;
-        return;
+        return true;
     }
     for (int i = 1; i <= 9; i++) {
         a[na][nb] = i;
@@ -254,6 +258,7 @@ bool dfs(int na, int nb, const string &output_path) { //第几行第几个
         na = nna, nb = nnb, bbid = bbidd, ccid = ccidd;
         a[nna][nnb] = 0;
     }
+    return true;
 }
 
 bool solve_single_sudoku(const string &output_path, bool need_output) {
@@ -287,6 +292,7 @@ bool solve_single_sudoku(const string &output_path, bool need_output) {
             answer.close();
         }
     }
+    return true;
 }
 
 bool Play_Game(const string &input_path, const string &output_path) {
@@ -333,6 +339,7 @@ bool Play_Game(const string &input_path, const string &output_path) {
             row++;
         }
     }
+    return true;
 }
 
 bool Generate_NewGame(const string& input_path, const string& output_path, int num, bool set_difficulty, int difficulty = EASY, int min_space = MIN_SPACE, int max_space = MAX_SPACE, bool only_solution = false) {
@@ -441,7 +448,7 @@ bool Generate_NewGame(const string& input_path, const string& output_path, int n
                         a[ii][jj] = temp[ii - 1][jj - 1] - '0';
                 }
             }
-            solve_single_sudoku("sudoku.txt", false);
+            solve_single_sudoku(solution_path, false);
             num_solution = alltheanswer;
             memset(a, 0, sizeof(a));
             memset(b, 0, sizeof(b));
@@ -478,36 +485,32 @@ int main(int n_argc, char *argv[]) {
     if (argvList[1] == "-c") {
         //生成终局文件
         int num = atoi(argvList[2].c_str());
-        string generate_path = "./end_game.txt";
-        Generate_EndGame(generate_path, num);
+        Generate_EndGame(end_game_path, num);
     } else if (argvList[1] == "-s") {
         //读取棋盘文件并求解
         string game_path = argvList[2];
-        string output_path = "./sudoku.txt";
-        Play_Game(game_path, output_path);
+        Play_Game(game_path, solution_path);
     } else if (argvList[1] == "-n") {
         //生成游戏
         int num = atoi(argvList[2].c_str());
-        string input_path = "./end_game.txt";
-        string generate_path = "./game.txt";
         if (argvList.size() == 3) {
             //生成指定数量的游戏
-            Generate_NewGame(input_path, generate_path, num, false);
+            Generate_NewGame(end_game_path, new_game_path, num, false);
         } else if (argvList.size() > 3) {
             if (argvList[3] == "-m") {
                 //生成指定难度的游戏
                 int difficulty = atoi(argvList[4].c_str());
-                Generate_NewGame(input_path, generate_path, num, true, difficulty);
+                Generate_NewGame(end_game_path, new_game_path, num, true, difficulty);
             } else if (argvList[3] == "-r") {
                 //生成指定空格数量范围的游戏
                 string scope = argvList[4];
                 size_t pos = scope.find('~');
                 int min_space = atoi(scope.substr(0, pos).c_str());
                 int max_space = atoi(scope.substr(pos + 1, scope.size()).c_str());
-                Generate_NewGame(input_path, generate_path, num, false, EASY, min_space, max_space);
+                Generate_NewGame(end_game_path, new_game_path, num, false, EASY, min_space, max_space);
             } else if (argvList[3] == "-u") {
                 //生成唯一解的游戏
-                Generate_NewGame(input_path, generate_path, num, false, EASY, MIN_SPACE, MAX_SPACE, true);
+                Generate_NewGame(end_game_path, new_game_path, num, false, EASY, MIN_SPACE, MAX_SPACE, true);
             } else {
                 cout << "参数非法！" << endl;
             }
